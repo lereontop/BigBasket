@@ -28,6 +28,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     this.categoryList = this.masterService.getAllCategory().pipe(
       map(product => product.data)
     )
+    
   }
   constructor() {
     const isUser = localStorage.getItem(Constant.LOCAL_KEY)
@@ -65,6 +66,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
     cartObj.CustId = this.loggedUserData.custId
     this.masterService.AddToCart(cartObj).subscribe((res:APIResponseModel)=>{
       if(res.result){
+        this.masterService.onCartAdded.next(true)
         alert('product Added to Cart')
         console.log(res.data)
 

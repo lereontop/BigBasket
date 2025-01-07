@@ -1,7 +1,7 @@
 import { MasterService } from './services/master.service';
 import { Component, ElementRef, inject, OnInit, ViewChild, viewChild } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { APIResponseModel, Customer, LoginModel } from './model/Product';
+import { APIResponseModel, CartData, CartModel, Customer, LoginModel } from './model/Product';
 import { FormsModule } from '@angular/forms';
 import { Constant } from './constant/constant';
 
@@ -16,7 +16,8 @@ export class AppComponent implements OnInit{
   registerObj: Customer = new Customer();
   loginObj: LoginModel = new LoginModel();
   loggedUserData: Customer = new Customer();
-
+  isCartPopupOpen:boolean = false
+  cartData: CartData[] =[]
 
 
   masterService  = inject(MasterService);
@@ -26,8 +27,16 @@ export class AppComponent implements OnInit{
       if(isUser != null){
         const parseObj = JSON.parse(isUser)
         this.loggedUserData = parseObj;
-
+        this.getCartItem()
       }
+      this.masterService.onCartAdded.subscribe((res:boolean)=>{
+        if(res){
+          this.getCartItem()
+
+
+        }
+      })
+
   }
 
   @ViewChild("registerModel") registerModel: ElementRef | undefined;
@@ -94,4 +103,30 @@ export class AppComponent implements OnInit{
     localStorage.removeItem(Constant.LOCAL_KEY);
     this.loggedUserData = new Customer();
   }
+
+  showCartPopup(){
+    this.isCartPopupOpen = !this.isCartPopupOpen
+  }
+
+  getCartItem(){
+    this.masterService.getCartProductsByCustomerId(this.loggedUserData.custId).subscribe((res:APIResponseModel)=>{
+      this.cartData = res.data;
+    })
+
+  }
+
+  onRemoveProduct(cartId: number){
+    this.masterService.deleteProductById(cartId).subscribe((res:APIResponseModel)=>{
+      if(res.result){
+        alert('Product Deleted From Cart')
+        this.getCartItem();
+        console.log(res.data)
+
+      }else {
+        alert(res.message)
+      }
+    })
+}
+
+
 }
