@@ -19,25 +19,22 @@ export class ProductsComponent implements OnInit, OnDestroy {
 
   categoryList: Observable<Category[]> = new Observable<Category[]>()
   subscriptionList: Subscription[] = [];
-  loggedUserData:Customer = new Customer()
+
 
   masterService = inject(MasterService);
+  constructor() {
+
+    }
+
 
   ngOnInit(): void {
     this.loadAllProducts();
     this.categoryList = this.masterService.getAllCategory().pipe(
       map(product => product.data)
     )
-    
-  }
-  constructor() {
-    const isUser = localStorage.getItem(Constant.LOCAL_KEY)
-    if (isUser != null) {
-      const parseObj = JSON.parse(isUser)
-      this.loggedUserData = parseObj;
 
-    }
   }
+
 
   getAllProductByCategoryId(id: number) {
     this.masterService.getAllProductsByCategoryId(id).subscribe((res: APIResponseModel) => {
@@ -63,7 +60,7 @@ export class ProductsComponent implements OnInit, OnDestroy {
   onAddToCart(id: number) {
     const cartObj: CartModel = new CartModel()
     cartObj.ProductId = id
-    cartObj.CustId = this.loggedUserData.custId
+    cartObj.CustId = this.masterService.loggedUserData.custId
     this.masterService.AddToCart(cartObj).subscribe((res:APIResponseModel)=>{
       if(res.result){
         this.masterService.onCartAdded.next(true)

@@ -1,13 +1,13 @@
 import { MasterService } from './services/master.service';
 import { Component, ElementRef, inject, OnInit, ViewChild, viewChild } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { RouterLink, RouterOutlet } from '@angular/router';
 import { APIResponseModel, CartData, CartModel, Customer, LoginModel } from './model/Product';
 import { FormsModule } from '@angular/forms';
 import { Constant } from './constant/constant';
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, FormsModule],
+  imports: [RouterOutlet, FormsModule, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.css'
 })

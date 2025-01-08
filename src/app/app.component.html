@@ -2,7 +2,7 @@
   class="navbar navbar-expand-lg navbar-light bg-body-tertiary"
   style="background-color: #6262e1 !important"
 >
-<!-- #6262e1 -->
+  <!-- #6262e1 -->
   <!-- Container wrapper -->
   <div class="container-fluid">
     <!-- Toggle button -->
@@ -90,11 +90,16 @@
         Logout
       </button>
       }
-      <a class="link-secondary me-4" >
+      <a class="link-secondary me-4">
         <i class="fa fa-shopping-cart text-white" (click)="showCartPopup()"></i>
       </a>
       <div
-        [className]=" isCartPopupOpen ?  'dropdown-menu dropdown-menu-end show': 'dropdown-menu dropdown-menu-end hide' " class=""
+        [className]="
+          isCartPopupOpen
+            ? 'dropdown-menu dropdown-menu-end show'
+            : 'dropdown-menu dropdown-menu-end hide'
+        "
+        class=""
         style="position: absolute; right: 13px; top: 60px"
         aria-labelledby="navbarDropdownMenuAvatar"
       >
@@ -109,32 +114,51 @@
         <table class="table table-sm">
           <tbody>
             @for (cart of cartData; track $index) {
-              <tr>
-                <td>
-                    <div class="rounded"
-                        style="background-image: url({{ cart.productImageUrl }}); width: 60px; height: 60px; background-size: cover;">
-                    </div>
-                </td>
-                <td class="align-middle text-left">{{ cart.productShortName }}</td>
-                <td class="align-middle text-center">{{ cart.quantity }} pieces </td>
-                <td class="align-middle text-right">{{ cart.productPrice }}</td>
-                <td class="align-middle text-center">
-                    <a (click)="onRemoveProduct(cart.cartId)" data-toggle="modal" data-title="Delete your product ?">
-                        <i class="fa fa-trash"></i>
-                    </a>
-                </td>
+            <tr>
+              <td>
+                <div
+                  class="rounded"
+                  style="background-image: url({{
+                    cart.productImageUrl
+                  }}); width: 60px; height: 60px; background-size: cover;"
+                ></div>
+              </td>
+              <td class="align-middle text-left">
+                {{ cart.productShortName }}
+              </td>
+              <td class="align-middle text-center">
+                {{ cart.quantity }} pieces
+              </td>
+              <td class="align-middle text-right">{{ cart.productPrice }}</td>
+              <td class="align-middle text-center">
+                <a
+                  (click)="onRemoveProduct(cart.cartId)"
+                  data-toggle="modal"
+                  data-title="Delete your product ?"
+                >
+                  <i class="fa fa-trash"></i>
+                </a>
+              </td>
             </tr>
             }
+
             <tr>
               <td colspan="4" class="align-middle text-right">Quantity</td>
               <td class="align-middle text-right">36</td>
-          </tr>
-              <tr>
-                  <td colspan="4" class="align-middle text-right">Total</td>
-                  <td class="align-middle text-right">3600</td>
-              </tr>
+            </tr>
+            <tr>
+              <td colspan="4" class="align-middle text-right">Total</td>
+              <td class="align-middle text-right">3600</td>
+            </tr>
+
           </tbody>
-      </table>
+        </table>
+        <div class="row">
+          <div class="col-12 text-end">
+            <button class="btn btn-primary btn-sm"  [routerLink]="['/create-order']" (click)="isCartPopupOpen = false" >Checkout</button>
+          </div>
+        </div>
+
       </div>
     </div>
   </div>
